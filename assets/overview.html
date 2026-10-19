@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fui — documents</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .card { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.6rem; }
+  .card .info { flex: 1; min-width: 0; }
+  .card a.title {
+    font-weight: 600; text-decoration: none;
+    display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .card a.title:hover { text-decoration: underline; }
+  .meta { color: var(--fu-ink-faint); font-size: 0.82rem; }
+  .badge {
+    font-size: 0.72rem; padding: 0.1rem 0.5rem;
+    border: 1px solid var(--fu-rule-strong); color: var(--fu-ink-soft); white-space: nowrap;
+  }
+  .empty { color: var(--fu-ink-faint); text-align: center; padding: 3rem 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>fui</h1>
+  <p>Documents rendered by your coding agent. State is persisted in SQLite and survives reboots.
+     The agent contract lives at <a href="/SKILL.md">/SKILL.md</a>.</p>
+  <div id="list"><p class="empty">Loading…</p></div>
+</main>
+<script>
+  function fmt(ms) {
+    return new Date(ms).toLocaleString(undefined, {
+      year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+    });
+  }
+
+  async function load() {
+    const res = await fetch("/api/pages");
+    const pages = await res.json();
+    const list = document.getElementById("list");
+    if (!pages.length) {
+      list.innerHTML = '<p class="empty">No documents yet. Ask your agent to read /SKILL.md and render one.</p>';
+      return;
+    }
+    list.innerHTML = "";
+    for (const p of pages) {
+      const card = document.createElement("aside");
+      card.className = "card";
+
+      const info = document.createElement("div");
+      info.className = "info";
+      const a = document.createElement("a");
+      a.className = "title";
+      a.href = "/p/" + encodeURIComponent(p.id);
+      a.textContent = p.title || p.id;
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.textContent = p.id + " · updated " + fmt(p.updated_at) +
+        " · " + p.state_count + " state key" + (p.state_count === 1 ? "" : "s");
+      info.append(a, meta);
+      card.append(info);
+
+      if (p.done) {
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = "done pending";
+        card.append(badge);
+      }
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.textContent = "Delete";
+      del.onclick = async () => {
+        if (!confirm('Delete "' + (p.title || p.id) + '" and its state?')) return;
+        await fetch("/api/pages/" + encodeURIComponent(p.id), {
+          method: "DELETE",
+          headers: { "X-Fui": "1" }
+        });
+        load();
+      };
+      card.append(del);
+
+      list.append(card);
+    }
+  }
+  load();
+</script>
+</body>
+</html>

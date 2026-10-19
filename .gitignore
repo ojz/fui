@@ -1,0 +1,6 @@
+fui
+fui.exe
+fui.exe~
+*.db
+*.db-wal
+*.db-shm

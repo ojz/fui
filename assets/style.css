@@ -1,0 +1,657 @@
+/* fui style.css — classless default stylesheet
+ *
+ * Add <link rel="stylesheet" href="/style.css"> to a page served at /p/<id>
+ * and plain semantic HTML is styled: no classes, no inline CSS to generate.
+ * Add your own <style> block afterwards for anything page-specific.
+ *
+ * Look: sun-bleached desert utility. Solarized palette on warm sand paper,
+ * hard square corners, thin diagonal "stitching" seams, monospaced tracked
+ * labels, and a disciplined three-step accent — orange for state, yellow for
+ * hover, red for pressed. Generous whitespace throughout. Light mode only.
+ *
+ * Every custom property is namespaced --fu-*. Pages routinely declare their own
+ * :root { --accent; --ink; --bg; --card } after this link, and an unprefixed
+ * name would silently rewire this whole sheet from the page's palette.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Solarized light: base3 page, a sand blend for cards, base2 for chrome. */
+  --fu-bg: #fdf6e3;         /* base3  */
+  --fu-panel: #f4eeda;      /* base3/base2 sand blend — card faces          */
+  --fu-panel-strong: #eee8d5; /* base2 — table heads, code, pressed chrome  */
+  --fu-sunken: #fdf6e3;     /* base3  — input wells sit lighter than cards   */
+
+  --fu-ink: #586e75;        /* base01 — primary text                        */
+  --fu-ink-soft: #657b83;   /* base00 — secondary text                      */
+  --fu-ink-faint: #93a1a1;  /* base1  — muted text, markers                 */
+
+  --fu-rule: #93a1a180;     /* base1 @ 50% — hairlines                      */
+  --fu-rule-strong: #839496; /* base0  — real borders                       */
+
+  --fu-accent: #cb4b16;        /* orange — state: checked, focus, primary   */
+  --fu-accent-hover: #b58900;  /* yellow — hover                            */
+  --fu-accent-active: #dc322f; /* red    — active / pressed                 */
+  --fu-on-warm: #002b36;       /* base03 — legible text on the yellow fill   */
+
+  --fu-zebra: #f1ebd8;
+  --fu-row-hover: #cb4b1614;
+  --fu-shadow: #586e7526;
+  --fu-stitch: #586e7533;
+  --fu-tex-a: #657b8309;
+  --fu-tex-b: #b5890008;
+
+  --fu-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fu-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+
+  --fu-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1 5.5 6 10 1' fill='none' stroke='%23657b83' stroke-width='1.5'/%3E%3C/svg%3E");
+
+  accent-color: var(--fu-accent);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0 auto;
+  max-width: 56rem;
+  padding: 3rem 2rem 5.5rem;
+  background-color: var(--fu-bg);
+  /* Faintest stillsuit weave across the page — desert paper, not a pattern. */
+  background-image:
+    repeating-linear-gradient(135deg, var(--fu-tex-a) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(45deg, var(--fu-tex-b) 0 1px, transparent 1px 14px);
+  background-attachment: fixed;
+  color: var(--fu-ink);
+  font-family: var(--fu-sans);
+  font-size: 16px;
+  line-height: 1.68;
+}
+
+/* ---------- text ---------- */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 2.75rem 0 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--fu-ink);
+}
+h1 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--fu-rule);
+}
+h2 {
+  font-size: 1.1875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+h3 { font-size: 1.0625rem; letter-spacing: 0.02em; }
+h4, h5, h6 { font-size: 0.9375rem; letter-spacing: 0.02em; }
+h5, h6 { color: var(--fu-ink-soft); }
+:is(h1, h2, h3, h4, h5, h6):first-child { margin-top: 0; }
+
+h1 + p, h2 + p, h3 + p { margin-top: 0; }
+
+p, ul, ol, dl, pre, blockquote, table, figure, details, form {
+  margin: 0 0 1.5rem;
+}
+
+ul, ol { padding-left: 1.5rem; }
+li { margin: 0.4rem 0; }
+li::marker { color: var(--fu-accent); }
+
+dt { font-weight: 700; }
+dd { margin: 0 0 0.75rem 1.5rem; color: var(--fu-ink-soft); }
+
+small { font-size: 0.8125rem; color: var(--fu-ink-soft); }
+
+strong, b { font-weight: 700; color: var(--fu-ink); }
+
+/* A stitched seam, not a line. */
+hr {
+  border: 0;
+  height: 0.5rem;
+  margin: 3rem 0;
+  background-image: repeating-linear-gradient(
+    135deg, var(--fu-rule-strong) 0 1px, transparent 1px 9px
+  );
+  border-top: 1px solid var(--fu-rule);
+  border-bottom: 1px solid var(--fu-rule);
+  opacity: 0.75;
+}
+
+blockquote {
+  border-left: 3px solid var(--fu-rule-strong);
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  color: var(--fu-ink-soft);
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--fu-ink-faint);
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--fu-accent);
+  text-decoration-color: var(--fu-accent);
+}
+a:active { color: var(--fu-accent-active); text-decoration-color: var(--fu-accent-active); }
+
+code, kbd, samp {
+  font-family: var(--fu-mono);
+  font-size: 0.875em;
+}
+:not(pre) > code, kbd {
+  background: var(--fu-panel-strong);
+  border: 1px solid var(--fu-rule);
+  padding: 0.1em 0.4em;
+}
+kbd { box-shadow: 1px 1px 0 0 var(--fu-rule-strong); }
+
+pre {
+  background: var(--fu-panel-strong);
+  border: 1px solid var(--fu-rule-strong);
+  border-left: 3px solid var(--fu-rule-strong);
+  padding: 1.125rem 1.25rem;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
+img, svg, video, canvas { max-width: 100%; height: auto; }
+
+/* Never upper-case an identifier. Several bits of chrome below are stencilled
+   in caps, and prose inside them regularly carries a <code> token: uppercasing
+   `active` into `ACTIVE` states something the code does not. */
+:is(thead th, legend, label, caption, figcaption, button, summary)
+  :is(code, kbd, samp, var) {
+  text-transform: none;
+}
+
+::selection { background: var(--fu-accent); color: var(--fu-bg); }
+
+/* ---------- grouping ---------- */
+
+/* Card: sand panel, hard edges, a stitched seam along the top inside edge,
+   and one hard offset shadow (no blur) so it reads as a stamped plate. */
+fieldset, aside {
+  background-color: var(--fu-panel);
+  background-image: repeating-linear-gradient(
+    135deg, var(--fu-stitch) 0 1px, transparent 1px 9px
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 0.6875rem;
+  border: 1px solid var(--fu-rule-strong);
+  padding: 1.875rem 1.75rem 1.625rem;
+  margin: 0 0 2.25rem;
+  box-shadow: 4px 4px 0 0 var(--fu-shadow);
+}
+/* The card's own bottom padding is the breathing room; a trailing element's
+   margin on top of it leaves a dead band, worst after a tall textarea. */
+fieldset > :last-child, aside > :last-child { margin-bottom: 0; }
+
+/* Legend bleeds into the card border: interrupts it, carries an orange tick. */
+legend {
+  background: var(--fu-bg);
+  border: 1px solid var(--fu-rule-strong);
+  border-left: 3px solid var(--fu-accent);
+  padding: 0.3rem 0.75rem;
+  margin-left: -0.25rem;
+  font-family: var(--fu-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fu-accent);
+}
+
+figcaption {
+  margin-top: 0.75rem;
+  font-family: var(--fu-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--fu-ink-soft);
+}
+
+details {
+  border-bottom: 1px solid var(--fu-rule);
+  padding-bottom: 0.75rem;
+}
+/* No box-inside-a-box: a trailing <details> inherits the card's own edge. */
+fieldset > details:last-child, aside > details:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  padding: 0.5rem 0 0.5rem 1.375rem;
+  position: relative;
+}
+/* The body hangs under the summary text, not under its marker. */
+details > :not(summary) { margin-left: 1.375rem; }
+summary::-webkit-details-marker { display: none; }
+/* Angular marker: a hard triangle that swings down when open. */
+summary::before {
+  content: "";
+  position: absolute;
+  left: 0.125rem;
+  top: 1.05rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--fu-ink-faint);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+summary:hover::before { background: var(--fu-accent-hover); }
+details[open] > summary::before {
+  transform: rotate(90deg);
+  background: var(--fu-accent);
+}
+
+/* ---------- tables ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  /* Opaque: the page's woven texture reads as grit through table rows. */
+  background: var(--fu-bg);
+  border: 1px solid var(--fu-rule-strong);
+}
+/* A table cannot scroll itself without losing width:100%, so wrap a wide one
+   in <figure> — semantic, already styled, and the caption still belongs to it. */
+figure:has(> table) { overflow-x: auto; }
+caption {
+  text-align: left;
+  font-family: var(--fu-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--fu-ink-soft);
+  padding-bottom: 0.75rem;
+}
+th, td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--fu-rule);
+  /* A long path or identifier sets the column's minimum width otherwise, and
+     one cell then pushes the whole table out of the text column. */
+  overflow-wrap: break-word;
+}
+thead th {
+  background: var(--fu-panel-strong);
+  font-family: var(--fu-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--fu-ink);
+  border-bottom: 2px solid var(--fu-rule-strong);
+}
+td { font-variant-numeric: tabular-nums; }
+
+/* Keep your place in a long table: alternating rows plus a hover tick. */
+tbody tr:nth-child(even) { background: var(--fu-zebra); }
+tbody tr:hover {
+  background: var(--fu-row-hover);
+  box-shadow: inset 3px 0 0 0 var(--fu-accent);
+}
+tbody tr:last-child > * { border-bottom: none; }
+
+tfoot td {
+  background: var(--fu-panel-strong);
+  color: var(--fu-ink-soft);
+  border-top: 2px solid var(--fu-rule-strong);
+  border-bottom: none;
+}
+
+/* ---------- forms ---------- */
+
+/* A bare label is a stencilled field caption. */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--fu-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--fu-accent);
+}
+/* A label wrapping its own control is a sentence: leave it readable.
+   Block, not flex: a flex label makes every <code>, <strong> and text run in
+   the sentence its own flex item, so the line shreds into columns. The
+   control is lifted out of flow instead, and wrapped lines hang under it. */
+label:has(input[type="checkbox"]), label:has(input[type="radio"]) {
+  display: block;
+  position: relative;
+  margin-bottom: 0.625rem;
+  padding: 0.4rem 0.5rem 0.4rem 1.6875rem;
+  font-family: var(--fu-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--fu-ink);
+  cursor: pointer;
+}
+label:has(input[type="checkbox"]):hover, label:has(input[type="radio"]):hover {
+  background: var(--fu-row-hover);
+}
+/* A stencilled caption right under a tick row is a new field, not that row's
+   continuation: give it the same air a control leaves behind it. */
+:is(label:has(input[type="checkbox"]), label:has(input[type="radio"])) + label {
+  margin-top: 1.375rem;
+}
+/* Sits on the first line: the 0.4rem pad plus half the leftover leading. The
+   small left inset keeps the control off the frame when a page borders these. */
+label:has(input[type="checkbox"]) input[type="checkbox"],
+label:has(input[type="radio"]) input[type="radio"] {
+  position: absolute;
+  left: 0.1875rem;
+  top: 0.65rem;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--fu-ink);
+}
+
+/* Sunken well with a gutter rail on the left that lights up on focus. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+textarea,
+select {
+  background: var(--fu-sunken);
+  border: 1px solid var(--fu-rule-strong);
+  border-left: 3px solid var(--fu-rule-strong);
+  padding: 0.625rem 0.75rem;
+  margin-bottom: 1.375rem;
+  box-shadow: inset 0 1px 3px var(--fu-shadow);
+  caret-color: var(--fu-accent);
+  transition: border-color 0.12s ease;
+}
+
+input[type="text"], input[type="search"], input[type="email"],
+input[type="url"], input[type="tel"], input[type="password"],
+input[type="number"], input[type="date"], input[type="time"],
+input[type="datetime-local"], input[type="month"], input[type="week"],
+textarea, select {
+  width: 100%;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="reset"]):hover,
+textarea:hover,
+select:hover {
+  border-left-color: var(--fu-accent-hover);
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
+textarea:focus,
+select:focus {
+  border-left-color: var(--fu-accent);
+}
+
+textarea { min-height: 6rem; resize: vertical; line-height: 1.6; }
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 2rem;
+  background-image: var(--fu-chevron);
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  cursor: pointer;
+}
+select[multiple] { background-image: none; padding-right: 0.75rem; }
+
+::placeholder { color: var(--fu-ink-faint); opacity: 1; }
+
+/* Checkbox / radio: hard square wells, angular glyphs, orange when set. */
+input[type="checkbox"], input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 0 0 auto;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  margin: 0;
+  display: inline-grid;
+  place-content: center;
+  border: 1px solid var(--fu-rule-strong);
+  background: var(--fu-sunken);
+  box-shadow: inset 0 1px 2px var(--fu-shadow);
+  cursor: pointer;
+  vertical-align: -0.2em;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+input[type="checkbox"]:hover, input[type="radio"]:hover {
+  border-color: var(--fu-accent-hover);
+}
+
+input[type="checkbox"]::before, input[type="radio"]::before {
+  content: "";
+  background: var(--fu-bg);
+  transform: scale(0);
+  transition: transform 0.12s ease;
+}
+/* Sharp-cornered tick — a struck mark, not a soft check. */
+input[type="checkbox"]::before {
+  width: 0.625rem;
+  height: 0.625rem;
+  clip-path: polygon(0 45%, 15% 30%, 38% 62%, 85% 0, 100% 15%, 40% 100%);
+}
+/* Radio fills with a diamond — and keeps a faint one seated in it while it is
+   empty. Unchecked, two hard square wells are otherwise identical, so nothing
+   tells single-choice from multi-choice until something is already picked. */
+input[type="radio"]::before {
+  width: 0.5625rem;
+  height: 0.5625rem;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: var(--fu-ink-faint);
+  transform: scale(0.55);
+}
+input[type="radio"]:hover::before { background: var(--fu-accent-hover); }
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+  background: var(--fu-accent);
+  border-color: var(--fu-accent);
+  box-shadow: none;
+}
+input[type="checkbox"]:checked:hover, input[type="radio"]:checked:hover {
+  background: var(--fu-accent-hover);
+  border-color: var(--fu-accent-hover);
+}
+input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+  background: var(--fu-bg);
+  transform: scale(1);
+}
+input[type="checkbox"]:indeterminate {
+  background: var(--fu-accent);
+  border-color: var(--fu-accent);
+}
+input[type="checkbox"]:indeterminate::before {
+  clip-path: none;
+  height: 2px;
+  width: 0.625rem;
+  transform: scale(1);
+}
+
+/* Range: a notched measuring rail with a hard wedge fastener. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.75rem;
+  background: transparent;
+  cursor: pointer;
+  margin-bottom: 1.375rem;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  background-color: var(--fu-panel-strong);
+  background-image: repeating-linear-gradient(
+    90deg, var(--fu-rule-strong) 0 1px, transparent 1px 8px
+  );
+  border: 1px solid var(--fu-rule-strong);
+  box-shadow: inset 0 1px 2px var(--fu-shadow);
+}
+input[type="range"]::-moz-range-track {
+  height: 0.5rem;
+  background-color: var(--fu-panel-strong);
+  background-image: repeating-linear-gradient(
+    90deg, var(--fu-rule-strong) 0 1px, transparent 1px 8px
+  );
+  border: 1px solid var(--fu-rule-strong);
+  box-shadow: inset 0 1px 2px var(--fu-shadow);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0.875rem;
+  height: 1.375rem;
+  margin-top: -0.5rem;
+  background: var(--fu-accent);
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 0.875rem;
+  height: 1.375rem;
+  border: 0;
+  border-radius: 0;
+  background: var(--fu-accent);
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+}
+input[type="range"]:hover::-webkit-slider-thumb { background: var(--fu-accent-hover); }
+input[type="range"]:hover::-moz-range-thumb { background: var(--fu-accent-hover); }
+input[type="range"]:active::-webkit-slider-thumb { background: var(--fu-accent-active); }
+input[type="range"]:active::-moz-range-thumb { background: var(--fu-accent-active); }
+
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 0.5rem;
+  border: 1px solid var(--fu-rule-strong);
+  background: var(--fu-panel-strong);
+  overflow: hidden;
+}
+progress::-webkit-progress-bar { background: var(--fu-panel-strong); }
+progress::-webkit-progress-value { background: var(--fu-accent); }
+progress::-moz-progress-bar { background: var(--fu-accent); }
+
+/* Buttons: machined key. Square, tracked, hard offset shadow, real travel. */
+button, input[type="submit"], input[type="button"], input[type="reset"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid var(--fu-rule-strong);
+  background: var(--fu-panel-strong);
+  color: var(--fu-ink);
+  padding: 0.6875rem 1.375rem;
+  font-family: var(--fu-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 0 var(--fu-shadow);
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+/* A submit is the primary action: it wears the accent. A bare <button> inside a
+   form submits too, so it counts; outside one, and for the type="button" the
+   done() handler pattern produces, .primary or [data-primary] says so. */
+button[type="submit"], input[type="submit"],
+form button:not([type]),
+button.primary, button[data-primary] {
+  background: var(--fu-accent);
+  border-color: var(--fu-accent);
+  color: var(--fu-bg);
+}
+
+/* Secondary hover/active stay readable: the seam under the label carries the
+   state colour, the text keeps its full-contrast ink. */
+button:hover:not(:disabled),
+input[type="submit"]:hover:not(:disabled),
+input[type="button"]:hover:not(:disabled),
+input[type="reset"]:hover:not(:disabled) {
+  border-color: var(--fu-accent-hover);
+  box-shadow: 2px 2px 0 0 var(--fu-shadow), inset 0 -3px 0 0 var(--fu-accent-hover);
+}
+:is(button[type="submit"], input[type="submit"], form button:not([type]),
+    button.primary, button[data-primary]):hover:not(:disabled) {
+  background: var(--fu-accent-hover);
+  border-color: var(--fu-accent-hover);
+  color: var(--fu-on-warm);
+  box-shadow: 2px 2px 0 0 var(--fu-shadow);
+}
+
+button:active:not(:disabled),
+input[type="submit"]:active:not(:disabled),
+input[type="button"]:active:not(:disabled),
+input[type="reset"]:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  border-color: var(--fu-accent-active);
+  box-shadow: inset 0 -3px 0 0 var(--fu-accent-active);
+}
+:is(button[type="submit"], input[type="submit"], form button:not([type]),
+    button.primary, button[data-primary]):active:not(:disabled) {
+  background: var(--fu-accent-active);
+  border-color: var(--fu-accent-active);
+  color: var(--fu-bg);
+  box-shadow: none;
+}
+
+button:disabled, input:disabled, textarea:disabled, select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* One focus treatment for everything, in the accent. */
+:focus-visible {
+  outline: 2px solid var(--fu-accent);
+  outline-offset: 2px;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline-offset: 1px;
+}
+
+/* ---------- narrow screens ---------- */
+
+/* Desktop gutters cost a sixth of a phone's width, and heading tracking that
+   reads as deliberate at 56rem just wraps early at 20. */
+@media (max-width: 40rem) {
+  body {
+    padding: 1.75rem 1.125rem 4rem;
+    font-size: 15px;
+  }
+  h1 { font-size: 1.3125rem; letter-spacing: 0.08em; }
+  h2 { font-size: 1.125rem; letter-spacing: 0.06em; }
+  fieldset, aside { padding: 1.375rem 1.125rem 1.25rem; }
+  legend { letter-spacing: 0.12em; }
+  th, td { padding: 0.5rem 0.625rem; }
+  /* Last resort for an unwrapped table on a phone: scroll it inside its own
+     border rather than dragging the whole page sideways. max-content keeps the
+     border tight around a small table, which display:block would otherwise
+     leave stretched full width around narrower rows. */
+  table {
+    display: block;
+    overflow-x: auto;
+    width: max-content;
+    max-width: 100%;
+  }
+  pre { padding: 0.875rem 1rem; }
+  hr { margin: 2rem 0; }
+  :is(h1, h2, h3, h4, h5, h6) { margin-top: 2rem; }
+}
